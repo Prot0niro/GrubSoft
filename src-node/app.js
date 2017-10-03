@@ -17,7 +17,10 @@ let init = function () {
   	console.log("Server started.");
 }
 
-mongoose.connect(mongoConfig.database);
+mongoose.connect(mongoConfig.database, {
+	useMongoClient: true
+});
+
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', console.error.bind(console, 'Connection error:'));
 db.once('open', init);

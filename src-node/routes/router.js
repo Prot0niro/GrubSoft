@@ -1,10 +1,9 @@
 const securityCtrl = require('./../controller/securityCtrl');
+const registerCtrl = require('./../controller/registerCtrl');
+const loginCtrl = require('./../controller/loginCtrl');
+const testCtrl = require('./../controller/testCtrl');
 
-let routeApp = function (app) {
-	var service = require('./../api/controllers/service');
-	var securityCtrl = require('./../api/controllers/security')(config);
-	var registerCtrl = require('./../api/controllers/register')(config);
-	var loginCtrl = require('./../api/controllers/login')(config);
+const routeApp = function (app) {
 
 	app.get('/', function (req, res) {
 		res.send('Hello World');
@@ -12,9 +11,9 @@ let routeApp = function (app) {
 
 	app.all('/service/*', securityCtrl.ensureAuthenticated);
 
-	app.get('/service/test', service.exec);
+	app.get('/service/test', testCtrl.test);
 
-	app.post('/register', registerCtrl.doPost);
+	app.post('/register', registerCtrl.register);
 
 	app.post('/login', loginCtrl.authenticate);
 }
