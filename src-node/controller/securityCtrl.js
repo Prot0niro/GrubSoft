@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const jwtSecret = require('./../config/jwt-config').jwtSecret;
+const jwtSecret = require('./../config/jwt-config').secret;
 const manageError = require('./../util/manage-error');
 const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');

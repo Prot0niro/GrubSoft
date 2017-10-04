@@ -1,4 +1,4 @@
-const User = require('./../model/UserSchema').getModel();
+const User = require('./../model/UserSchema');
 const manageError = require('./../util/manage-error');
 const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');
