@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const jwtSecret = require('./../config/jwt-config').secret;
-const User = require('./../model/UserSchema');
+const User = require('./../model/User');
 const manageError = require('./../util/manage-error');
 const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');
@@ -59,7 +59,6 @@ function createUserObject (mongooseUser) {
 }
 
 function createToken (user, res) {
-	console.log(typeof user);
 	jwt.sign(user, jwtSecret, jwtOptions, (err, token) => {
 		if (err) {
 			manageError(err, res);
