@@ -5,7 +5,7 @@ const Combo = require('./Combo');
 const Oferta = require('./Oferta');
 
 const schema = new mongoose.Schema({
-	total: Number,
+    total: { type: Number, required: true },
     items: [Item.schema],
     combos: [Combo.schema],
     ofertas: [Oferta.schema],

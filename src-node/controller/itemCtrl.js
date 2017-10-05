@@ -66,41 +66,26 @@ services.deleteItem = (req, res) => {
 services.updateItem = (req, res) => {
 	const itemId = req.params.id;
 	const body = req.body;
-	checkInputBody(body, findAndUpdateItem(itemId, body, res));
-};
+	body.modificado_por = req.user.username;
 
-function checkInputBody (body, cb) {
-	if (body.precio && typeof body.precio !== 'number') {
-		invalidInputErr.message = messages.invalidParam('precio');
-		cb(invalidInputErr);
-	} else {
-		cb(null);
-	}
-}
-
-function findAndUpdateItem (itemId, body, res) {
-	return function (err) {
+	ItemModel.findById(itemId, (err, item) => {
 		if (err) {
-			errorHandler.generalError(err, res)
+			errorHandler.mongooseError(err, res);
+		} else if (!item) {
+			errorHandler.generalError(itemNotFoundErr, res);
 		} else {
-			ItemModel.findById(itemId, (err, item) => {
-				if (err) {
-					errorHandler.mongooseError(err, res);
-				} else if (!item) {
-					errorHandler.generalError(itemNotFoundErr, res);
-				} else {
-					updateItem(item, body, res);
-				}
-			});
+			updateItem(item, body, res);
 		}
-	};
-}
+	});
+};
 
 function updateItem (item, body, res) {
 	item.nombre = body.nombre || item.nombre;
 	item.descripcion = body.descripcion || item.descripcion;
 	item.precio = body.precio || item.precio;
 	item.imagen = body.imagen || item.imagen;
+	item.modificado_por = body.modificado_por;
+	body.fecha_modificado = new Date;
 
 	item.save((err, updatedItem) => {
 		if (err) {

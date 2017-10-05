@@ -34,7 +34,6 @@ services.authenticate = (req, res) => {
 		} else if (!mongooseUser) {
 			manageError(invalidUserErr, res);
 		} else {
-			console.log(mongooseUser);
 			comparePassword(mongooseUser, password, res);
 		}
 	});

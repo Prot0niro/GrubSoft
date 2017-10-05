@@ -7,6 +7,7 @@ module.exports = {
 	},
 	CORRECT_LOGIN: 'Login correcto',
 	FORBIDDEN_ACCESS: 'Acceso prohibido',
+	ITEMS_NOT_FOUND: 'Uno o más items no existen en la base de datos',
 	INCORRECT_LOGIN: 'Usuario o contraseña inválidos',
 	INTERNAL_ERROR: 'Error interno, contacte al administrador',
 	MONG_CAST_ERR: 'Error de casteo, ve mongooseMsg para más detalles',

@@ -21,7 +21,7 @@ services.register = (req, res) => {
 	const body = req.body;
 	
 	console.log('Registrando');
-	console.log(body);
+	console.log(body.username);
 
 	checkReqParams(body, registerReqParams, (err) => {
 		if (err) {
