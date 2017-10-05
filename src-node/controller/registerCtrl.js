@@ -1,5 +1,5 @@
 const User = require('./../model/User');
-const manageError = require('./../util/manage-error');
+const manageError = require('./../util/error-handler').generalError;
 const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');
 const checkReqParams = require('./../util/validations').checkReqParams;

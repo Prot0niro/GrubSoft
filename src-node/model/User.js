@@ -6,7 +6,9 @@ const schema = new mongoose.Schema({
 	username: { type: String, required: true, index: { unique: true } },
 	password: { type: String, required: true },
 	nombre: { type: String },
-	admin: Boolean
+	admin: Boolean,
+    fecha_creado: { type: Date, default: Date.now },
+    fecha_modificado: { type: Date, default: Date.now }
 });
 
 schema.pre('save', function (next) {

@@ -1,21 +1,23 @@
 const securityCtrl = require('./../controller/securityCtrl');
 const registerCtrl = require('./../controller/registerCtrl');
 const loginCtrl = require('./../controller/loginCtrl');
-const testCtrl = require('./../controller/testCtrl');
+const itemCtrl = require('./../controller/itemCtrl');
 
 const routeApp = function (app) {
 
-	app.get('/', function (req, res) {
-		res.send('Hello World');
-	});
+	app.post('/register', registerCtrl.register);
+	app.post('/login', loginCtrl.authenticate);
 
 	app.all('/service/*', securityCtrl.ensureAuthenticated);
 
-	app.get('/service/test', testCtrl.test);
+	app.delete('/service/items/:id', itemCtrl.deleteItem);
 
-	app.post('/register', registerCtrl.register);
+	app.get('/service/items', itemCtrl.getItems);
+	app.get('/service/items/:id', itemCtrl.getItem);
 
-	app.post('/login', loginCtrl.authenticate);
+	app.post('/service/items', itemCtrl.createItem);
+
+	app.put ('/service/items/:id', itemCtrl.updateItem);
 }
 
 exports.routeApp = routeApp;

@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const jwtSecret = require('./../config/jwt-config').secret;
 const User = require('./../model/User');
-const manageError = require('./../util/manage-error');
+const manageError = require('./../util/error-handler').generalError;
 const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');
 
@@ -34,6 +34,7 @@ services.authenticate = (req, res) => {
 		} else if (!mongooseUser) {
 			manageError(invalidUserErr, res);
 		} else {
+			console.log(mongooseUser);
 			comparePassword(mongooseUser, password, res);
 		}
 	});

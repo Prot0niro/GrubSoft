@@ -10,7 +10,11 @@ const schema = new mongoose.Schema({
     combos: [Combo.schema],
     ofertas: [Oferta.schema],
     fecha: { type: Date, default: Date.now },
-	atendio: String
+	atendio: String,
+    fecha_creado: { type: Date, default: Date.now },
+    fecha_modificado: { type: Date, default: Date.now },
+    creado_por: String,
+    modificado_por: String
 });
 
-module.exports = mongoose.model('Combo', schema);
+module.exports = mongoose.model('Ticket', schema);

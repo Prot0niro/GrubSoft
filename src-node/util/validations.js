@@ -1,9 +1,7 @@
 const messages = require('./messages');
 const statusCodes = require('./status-codes');
 
-const errorBody = {
-	success: false
-};
+const errorBody = {};
 
 module.exports = {
 	checkReqParams: (body, reqParams, cb) => {
