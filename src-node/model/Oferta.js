@@ -20,6 +20,11 @@ const schema = new mongoose.Schema({
 	modificado_por: 	String
 });
 
+schema.statics.getOfertasDeHoy = function (cb) {
+	const dia = (new Date).getDay();
+	this.find({ dias: dia }, cb);
+};
+
 function diasValidation (arr) {
 	return arr.every(v => {
 		return typeof v === 'number' && v >= 0 && v <=6;

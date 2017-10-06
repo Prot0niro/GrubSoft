@@ -1,4 +1,5 @@
 const ItemModel = require('./../model/Item');
+const categoriaModel = require('./../model/Categoria');
 const errorHandler = require('./../util/error-handler');
 const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');
@@ -18,13 +19,7 @@ services.createItem = (req, res) => {
 	itemObject.creado_por = req.user.username;
 	const item = new ItemModel(itemObject);
 
-	item.save((err, savedItem) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else {
-			res.status(statusCodes.CREATED).send(savedItem);
-		}
-	});
+	categoriaModel.findById(item.categoria, checkIfCategoriaExists(itemObject, res));
 };
 
 services.getItems = (req, res) => {
@@ -79,11 +74,30 @@ services.updateItem = (req, res) => {
 	});
 };
 
+function checkIfCategoriaExists (itemObject, res) {
+	return function (err) {
+		if (err) {
+			return errorHandler.mongooseError(err, res)
+		}
+
+		const item = new ItemModel(itemObject);
+		item.save((err, savedItem) => {
+		if (err) {
+			errorHandler.mongooseError(err, res);
+		} else {
+			res.status(statusCodes.CREATED).send(savedItem);
+		}
+	});
+	}
+}
+
 function updateItem (item, body, res) {
 	item.nombre = body.nombre || item.nombre;
 	item.descripcion = body.descripcion || item.descripcion;
 	item.precio = body.precio || item.precio;
 	item.imagen = body.imagen || item.imagen;
+	item.guiso = body.guiso || item.guiso;
+	item.categoria = body.categoria || item.categoria;
 	item.modificado_por = body.modificado_por;
 	body.fecha_modificado = new Date;
 

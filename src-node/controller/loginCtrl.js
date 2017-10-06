@@ -6,7 +6,7 @@ const manageError = require('./../util/error-handler').generalError;
 const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');
 
-const TOKEN_EXPIRE = '3h';
+const TOKEN_EXPIRE = '7d';
 const invalidUserErr = {
 	message: messages.INCORRECT_LOGIN,
 	statusCode: statusCodes.BAD_REQUEST

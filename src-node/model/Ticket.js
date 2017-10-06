@@ -1,14 +1,10 @@
 const mongoose = require('mongoose');
 
-const Item = require('./Item');
-const Combo = require('./Combo');
-const Oferta = require('./Oferta');
-
 const schema = new mongoose.Schema({
     total: { type: Number, required: true },
-    items: [Item.schema],
-    combos: [Combo.schema],
-    ofertas: [Oferta.schema],
+    items: [mongoose.Schema.Types.Mixed],
+    combos: [mongoose.Schema.Types.Mixed],
+    ofertas: [mongoose.Schema.Types.Mixed],
     fecha: { type: Date, default: Date.now },
 	atendio: String,
     fecha_creado: { type: Date, default: Date.now },

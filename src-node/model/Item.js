@@ -10,6 +10,8 @@ const itemNotFoundErr = {
 
 const schema = new mongoose.Schema({
 	nombre: { type: String, required: true, index: { unique: true } },
+	categoria: { type: String, required: true },
+	guiso: Boolean,
 	descripcion: { type: String, required: true },
 	precio: { type: Number, required: true },
 	imagen: String,
