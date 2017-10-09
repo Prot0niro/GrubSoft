@@ -28,7 +28,7 @@ services.generateTicket = (req, res) => {
 			}
 
 			input.ofertas = ofertas;
-			generarTicket(input, res);
+			getItems(input, res);
 		});
 	});
 	
@@ -36,12 +36,12 @@ services.generateTicket = (req, res) => {
 
 function checkNewTicketInput (input, cb) {
 	let totItems = 0;
-	if (input.items && input.items.length) {
-		totItems += input.items.length;
+	if (input.itemsIds && input.itemsIds.length) {
+		totItems += input.itemsIds.length;
 	}
 
-	if (input.combos && input.combos.length) {
-		totItems += input.combos.length;
+	if (input.combosIds && input.combosIds.length) {
+		totItems += input.combosIds.length;
 	}
 
 	if (totItems < 1) {
@@ -52,8 +52,8 @@ function checkNewTicketInput (input, cb) {
 }
 
 function getItems (input, res) {
-	if (input.items && input.items.length) {
-		ItemModel.find({ _id: { $in: input.items } }, (err, items) => {
+	if (input.itemsIds && input.itemsIds.length) {
+		ItemModel.find({ _id: { $in: input.itemsIds } }, (err, items) => {
 			if (err) {
 				return errorHandler.mongooseError(err, res);
 			}
@@ -67,8 +67,8 @@ function getItems (input, res) {
 }
 
 function getCombos (input, res) {
-	if (input.combos && input.combos.length) {
-		comboModel.find({ _id: { $in: input.combos } }, (err, combos) => {
+	if (input.combosIds && input.combosIds.length) {
+		comboModel.find({ _id: { $in: input.combosIds } }, (err, combos) => {
 			if (err) {
 				return errorHandler.mongooseError(err, res);
 			}
@@ -82,35 +82,86 @@ function getCombos (input, res) {
 }
 
 function generarTicket (input, res) {
-	input.items = formatItems(input.items);
+	input.itemsIds = formatItemsIds(input.itemsIds);
+	input.items = formatItems(input.items, input.itemsIds);
+	input.combosIds = formatCombosIds(input.combosIds);
+	input.combos = formatCombos(input.combos, input.combosIds);
 	input.ofertas = formatOfertas(input.ofertas);
 
 	const ticket = {
-		total: getTotal(input).toFixed(1),
+		total: getTotal(input),
 		items: input.items,
-		ofertas: input.ofertas,
-		combos: input.comboss
+		combos: input.combos,
+		ofertas: input.ofertas
 	};
 
 	res.status(201).send(ticket);
 }
 
-function formatItems (items) {
+function formatItemsIds (itemsIds) {
+	if (!itemsIds || !itemsIds.length) {
+		return;
+	}
+
+	let formatedItemsIds = {};
+	itemsIds.forEach(itemId => {
+		if (!formatedItemsIds[itemId]) {
+			formatedItemsIds[itemId] = {};
+			formatedItemsIds[itemId]._id = itemId;
+			formatedItemsIds[itemId].cantidad = 1;
+		} else {
+			formatedItemsIds[itemId].cantidad++;
+		}
+	});
+
+	return formatedItemsIds;
+}
+
+function formatItems (items, itemsIds) {
 	if (!items || !items.length) {
 		return;
 	}
 
 	let formatedItems = {};
 	items.forEach(item => {
-		if (!formatedItems[item._id]) {
-			formatedItems[item._id] = item;
-			formatedItems[item._id].cantidad = 1;
-		} else {
-			formatedItems[item._id].cantidad = formatedItems[item._id].cantidad + 1;
-		}
+		item.cantidad = itemsIds[item._id].cantidad;
+		formatedItems[item._id] = item;
 	});
 
 	return formatedItems;
+}
+
+function formatCombosIds (ids) {
+	if (!ids || !ids.length) {
+		return;
+	}
+
+	let formatedIds = {};
+	ids.forEach(id => {
+		if (!formatedIds[id]) {
+			formatedIds[id] = {};
+			formatedIds[id]._id = id;
+			formatedIds[id].cantidad = 1;
+		} else {
+			formatedIds[id].cantidad++;
+		}
+	});
+
+	return formatedIds;
+}
+
+function formatCombos (combos, ids) {
+	if (!combos || !combos.length) {
+		return;
+	}
+
+	let formatedCombos = {};
+	combos.forEach(combo => {
+		combo.cantidad = ids[combo._id].cantidad;
+		formatedCombos[combo._id] = combo;
+	});
+
+	return formatedCombos;
 }
 
 function formatOfertas (ofertas) {
@@ -130,14 +181,25 @@ function getTotal (input) {
 	let total = 0;
 
 	total += getTotalFromCombos(input.combos);
+	total += getTotalFromItems(input.items, input.ofertas);
+
+	return monetizar(total);
 }
 
 function getTotalFromCombos (combos) {
-	if (combos && combos.length) {
-		return combos.reduce((total, combo) => total + combo.precio, 0);
+	if (!combos) {
+		return 0;
 	}
 
-	return 0;
+	let total = 0;
+	for (let comboId in combos) {
+		if (combos.hasOwnProperty(comboId)) {
+			let combo = combos[comboId];
+			total += combo.precio * combo.cantidad;
+		}
+	}
+
+	return total;
 }
 
 function getTotalFromItems (items, ofertas) {
@@ -145,10 +207,10 @@ function getTotalFromItems (items, ofertas) {
 		return 0;
 	}
 
-	const total = 0;
+	let total = 0;
 	for (let itemId in items) {
 		if (items.hasOwnProperty(itemId)) {
-			let item = items.itemId;
+			let item = items[itemId];
 			if (ofertas[itemId]) {
 				total += calcularTotalDeOferta(item, ofertas[itemId]);
 			} else {
@@ -163,15 +225,30 @@ function getTotalFromItems (items, ofertas) {
 function calcularTotalDeOferta(item, oferta) {
 	const precio = item.precio;
 	const cantidad = item.cantidad;
+	const x = oferta.x_por_y_x;
+	const y = oferta.x_por_y_y;
+
 	switch (oferta.tipo) {
 		case 'D':
-			return (precio * cantidad * (oferta.descuento/100)).toFixed(1);
+			return (precio * cantidad * (oferta.descuento/100));
 
 		case 'X':
-			return ((cantidad/)).toFixed(1);
+			return (Math.floor(cantidad/x) * y * precio + cantidad%x * precio);
 
 		default:
 			return 0;
+	}
+}
+
+function monetizar (num) {
+	let dec = parseInt(('' + num).split('.')[1] || 0);
+
+	if (dec < 40) {
+		return Math.floor(num);
+	} else if (dec > 60) {
+		return Math.ceil(num);
+	} else {
+		return Math.floor(num) + .5;
 	}
 }
 

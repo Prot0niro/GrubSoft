@@ -32,7 +32,7 @@ const routeApp = (app) => {
 	app.post('/service/combos', comboCtrl.createDocument);
 	app.post('/service/items', itemCtrl.createItem);
 	app.post('/service/ofertas', ofertaCtrl.createDocument);
-	app.post('/service/ticket', ticketCtrl.generateTicket)
+	app.post('/service/tickets', ticketCtrl.generateTicket)
 
 	app.put ('/service/categorias/:id', categoriaCtrl.updateDocument);
 	app.put ('/service/combos/:id', comboCtrl.updateDocument);
