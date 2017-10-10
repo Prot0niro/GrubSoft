@@ -9,12 +9,14 @@ const mongoConfig = require('./config/mongo-config');
 let app = express();
 
 app.use(bodyParser.json());
+app.use('/modules', express.static('node_modules'));
+app.use(express.static('public'));
 
 let init = function () {
 	router.routeApp(app);
 
   	http.createServer(app).listen(8888);
-  	console.log("Server started.");
+  	console.log("Servidor iniciado.");
 }
 
 mongoose.connect(mongoConfig.database, {

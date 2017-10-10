@@ -1,8 +1,38 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
 	<head>
 		<title>GrubSoft</title>
+		<link rel="stylesheet" href="/modules/bootstrap/dist/css/bootstrap.min.css">
 	</head>
-	<body>
-		Hello World!
+	<body ng-app="grubsoft-main">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand" href="#">GrubSoft</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">
+							Cajero
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">
+							Corte
+						</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<div ng-view class="container-fluid">
+		</div>
+
+		<script src="/modules/jquery/dist/jquery.js"></script>
+		<script src="/modules/angular/angular.min.js"></script>
+		<script src="/modules/angular-route/angular-route.min.js"></script>
+		<script src="/js/grubsoft.js"></script>
 	</body>
 </html>
