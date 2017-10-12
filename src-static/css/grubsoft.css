@@ -47,7 +47,6 @@ code {
   position: absolute;
   bottom: 0px;
   align-content: right;
-  text-align: right;
   width: 100%;
   padding-right: 50px;
   padding-bottom: 25px;
@@ -63,4 +62,22 @@ code {
 
 button {
   cursor: pointer;
+}
+
+.gs-row-menu {
+   display: flex;
+   flex-wrap: wrap;
+}
+
+.gs-row-menu > div[class*='col-'] {
+  display: flex;
+}
+
+.gs-card-margin {
+  margin-top: 20px;
+}
+
+.gs-container-align-middle {
+  display: flex;
+  align-items: center;
 }

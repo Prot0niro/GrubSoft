@@ -1,0 +1,35 @@
+<div class="row gs-selection-row">
+	<div class="col gs-scroll">
+		<div class="card w-100 gs-card-margin" ng-repeat="venta in carrito | gsReverse track by $index ">
+			<div class="card-body container">
+				<div class="row">
+					<div class="col-4">
+						<p class="card-text align-bottom">{{venta.nombre}}</p>
+					</div>
+					<div class="col-4" style="text-align: right;">
+						<p class="card-text align-bottom">{{venta.precio | currency}}</p>
+					</div>
+					<div class="col" style="text-align: right;">
+						<button type="button" class="btn btn-danger">Remover</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row gs-cajero-total">
+	<div class="col container">
+		<div class="row gs-container-align-middle">
+			<div class="col">
+				Total:
+			</div>
+			<div class="col" style="text-align: right;">
+				{{30 | currency}}
+			</div>
+			<div class="col-7" style="text-align: right;">
+				<button type="button" class="btn btn-danger">Cancelar</button>
+				<button type="button" class="btn btn-primary">Vender</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,14 @@
+<div class="row gs-selection-row">
+	<div class="col">
+		<div class="list-group">
+			<button type="button" class="list-group-item list-group-item-action" 
+				ng-class="{ active: isAllSelected() }" ng-click="selectAll()">
+			Todo
+			</button>
+			<button type="button" class="list-group-item list-group-item-action" ng-class="{ active: categoria.seleccionada }"
+				ng-repeat="categoria in categorias track by $index" ng-click="selectCategoria(categoria)">
+				{{categoria.nombre}}
+			</button>
+		</div>
+	</div>
+</div>

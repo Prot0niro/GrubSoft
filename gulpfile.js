@@ -25,7 +25,8 @@ gulp.task('watch', function () {
 
 gulp.task('start-server', function () {
 	const stream = nodemon({
-		script: 'src-node/app.js'
+		script: 'src-node/app.js',
+		watch: ['src-node/**/*.js']
 	});
 
 	stream.on('restart', function () {

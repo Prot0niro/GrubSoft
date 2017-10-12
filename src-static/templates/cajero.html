@@ -1,84 +1,12 @@
 <div class="row border gs-row-cajero">
 	<div class="col-md-3 border gs-col-cajero">
-		<div class="row gs-selection-row">
-			<div class="col gs-scroll">
-				<br />
-				<div class="card w-100">
-					<div class="card-body">
-						<div class="container">
-							<div class="row">
-								<div class="col-8">
-									<p class="card-text align-bottom">Test test test test test test test test test test</p>
-								</div>
-								<div class="col" style="text-align: right;">
-									<button type="button" class="btn btn-primary">Button</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row gs-cajero-total">
-			<div class="col">
-				Test 123121.12
-				<button type="button" class="btn btn-danger">Test</button>
-				<button type="button" class="btn btn-primary">Test</button>
-			</div>
-		</div>
+		<gs-cajero-venta carrito="carrito"></gs-cajero-venta>
 	</div>
 	<div class="col-md border gs-scroll">
-		<br />
-		<div class="card-deck">
-			<div class="card" style="width: 20rem;">
-				<img class="card-img-top" src="/images/necro.jpeg" alt="Card image cap">
-				<div class="card-body">
-					<h4 class="card-title">Card title</h4>
-					<p class="card-text">Some quick example text to .</p>
-					<button type="button" class="btn btn-primary">Go somewhere</button>
-				</div>
-			</div>
-			<div class="card" style="width: 20rem;">
-				<img class="card-img-top" src="/images/necro.jpeg" alt="Card image cap">
-				<div class="card-body">
-					<h4 class="card-title">Card title</h4>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<button type="button" class="btn btn-primary">Go somewhere</button>
-				</div>
-			</div>
-			<div class="card" style="width: 20rem;">
-				<img class="card-img-top" src="/images/necro.jpeg" alt="Card image cap">
-				<div class="card-body">
-					<h4 class="card-title">Card title</h4>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<button type="button" class="btn btn-primary">Go somewhere</button>
-				</div>
-			</div>
-			<div class="card" style="width: 20rem;">
-				<img class="card-img-top" src="/images/necro.jpeg" alt="Card image cap">
-				<div class="card-body">
-					<h4 class="card-title">Card title</h4>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<button type="button" class="btn btn-primary">Go somewhere</button>
-				</div>
-			</div>
-		</div>
-		<br />
+		<gs-cajero-menu items="items" cat-selected="catSelected" carrito="carrito"></gs-cajero-menu>
 	</div>
 	<div class="col-md-2 border gs-col-cajero">
 		<br />
-		<div class="row gs-selection-row">
-			<div class="col">
-				<div class="list-group">
-					<button href="#" class="list-group-item active">
-					Cras justo odio
-					</button>
-					<button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
-					<button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
-					<button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
-					<button type="button" class="list-group-item list-group-item-action disabled">Vestibulum at eros</button>
-				</div>
-			</div>
-		</div>
+		<gs-cajero-categorias categorias="categorias" cat-selected="catSelected"></gs-cajero-categorias>
 	</div>
 </div>
