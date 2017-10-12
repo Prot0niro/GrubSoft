@@ -3,32 +3,43 @@
 	<head>
 		<title>GrubSoft</title>
 		<link rel="stylesheet" href="/modules/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/grubsoft.css">
 	</head>
 	<body ng-app="grubsoft-main">
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="#">GrubSoft</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+		<header>
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+				<a class="navbar-brand" href="#">GrubSoft</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
 
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="#">
-							Cajero
-						</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">
-							Corte
-						</a>
-					</li>
-				</ul>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active">
+							<a class="nav-link" href="#">
+								Cajero
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">
+								Corte
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+
+		<main role="main" class="container-fluid">
+			<div ng-view>
 			</div>
-		</nav>
+		</main>
 
-		<div ng-view class="container-fluid">
-		</div>
+		<footer class="footer">
+			<div class="container">
+				<span class="text-muted">GrubSoft by Prot0niro.</span>
+			</div>
+		</footer>
 
 		<script src="/modules/jquery/dist/jquery.js"></script>
 		<script src="/modules/angular/angular.min.js"></script>

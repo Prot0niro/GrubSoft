@@ -11,6 +11,7 @@ let app = express();
 app.use(bodyParser.json());
 app.use('/modules', express.static('node_modules'));
 app.use(express.static('public'));
+app.use('/images', express.static('images'));
 
 let init = function () {
 	router.routeApp(app);
