@@ -16,5 +16,6 @@ module.exports = {
 	MONG_VALID_ERROR: 'Error de validación de mongoose, ve mongooseMsg para más detalles',
 	TICKET_BAD_REQUEST: 'Error en la petición de un nuevo ticket',
 	USER_CREATED: 'Usuario creado',
-	USER_DUPLICATED: 'Ya existe un usuario con el username preveído'
+	USER_DUPLICATED: 'Ya existe un usuario con el username preveído',
+	UNAUTHORIZED_ACCESS: 'Acceso no autorizado'
 };

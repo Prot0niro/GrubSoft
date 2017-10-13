@@ -27,3 +27,8 @@ mongoose.connect(mongoConfig.database, {
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
 db.once('open', init);
+
+process.on('uncaughtException', function(err) {
+	console.log('Error global: ')
+	console.log(err);
+});

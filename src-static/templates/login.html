@@ -1,0 +1,27 @@
+<div class="container">
+
+	<form class="form-signin" ng-submit="login()">
+		<h2 class="form-signin-heading">Log in</h2>
+
+		<div class="alert alert-danger" role="alert" ng-show="error">
+			{{errorMsg}}
+		</div>
+		
+		<br />
+		
+		<label for="inputEmail" class="sr-only">Usuario</label>
+		<input type="text" id="inputEmail" class="form-control" placeholder="Usuario" required autofocus
+			ng-model="form.username">
+		
+		<br />
+
+		<label for="inputPassword" class="sr-only">Contraseña</label>
+		<input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required
+			ng-model="form.password">
+		
+		<br />
+		
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+	</form>
+
+</div>

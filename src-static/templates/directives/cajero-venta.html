@@ -10,7 +10,7 @@
 						<p class="card-text align-bottom">{{venta.precio | currency}}</p>
 					</div>
 					<div class="col" style="text-align: right;">
-						<button type="button" class="btn btn-danger">Remover</button>
+						<button type="button" class="btn btn-danger" ng-click="remover($index)">Remover</button>
 					</div>
 				</div>
 			</div>
@@ -24,10 +24,10 @@
 				Total:
 			</div>
 			<div class="col" style="text-align: right;">
-				{{30 | currency}}
+				{{calcularTotal() | currency}}
 			</div>
 			<div class="col-7" style="text-align: right;">
-				<button type="button" class="btn btn-danger">Cancelar</button>
+				<button type="button" class="btn btn-danger" ng-click="cancelar()">Cancelar</button>
 				<button type="button" class="btn btn-primary">Vender</button>
 			</div>
 		</div>

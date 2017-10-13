@@ -6,14 +6,14 @@ const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');
 
 const securityErr = {
-	message: messages.FORBIDDEN_ACCESS,
-	statusCode: statusCodes.FORBIDDEN
+	message: messages.UNAUTHORIZED_ACCESS,
+	statusCode: statusCodes.UNAUTHORIZED
 };
 
 const services = {};
 
 services.ensureAuthenticated = (req, res, next) => {
-	const token = req.body.token || req.query.token || req.headers['x-access-token'];
+	const token =  req.headers['x-access-token'] || req.body.token || req.query.token;
 
 	if (token) {
 		jwt.verify(token, jwtSecret, function(err, decoded) {

@@ -13,7 +13,7 @@ app.controller('cajeroCategoriaCtrl', function ($scope) {
 	$scope.selectCategoria = function (categoria) {
 		_this.deselectAllCategorias();
 		categoria.seleccionada = true;
-		$scope.catSelected = categoria.nombre;
+		$scope.catSelected = categoria._id;
 	};
 
 	_this.deselectAllCategorias = function () {

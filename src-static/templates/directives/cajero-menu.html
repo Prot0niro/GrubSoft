@@ -3,7 +3,7 @@
 		<div class="col-sm-3" ng-repeat="item in items track by $index" ng-show="showItem(item)">
 			<div class="card gs-card-menu gs-card-margin">
 				
-				<img class="card-img-top" ng-src="/images/{{item.imagen}}" alt="Imagen">
+				<img class="card-img-top" ng-src="/images/{{item.imagen || 'necro.jpeg'}}" alt="Imagen">
 
 				<div class="card-body">
 					<h4 class="card-title">{{item.nombre}}</h4>
