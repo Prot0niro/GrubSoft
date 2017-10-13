@@ -1,4 +1,4 @@
-app.controller('cajeroVentaCtrl', function ($scope) {
+app.controller('cajeroVentaCtrl', function ($scope, ticketServices) {
 	$scope.total = 0;
 
 	$scope.remover = function (index) {
@@ -18,6 +18,19 @@ app.controller('cajeroVentaCtrl', function ($scope) {
 		}
 
 		return total;
+	}
+
+	$scope.$watch('carrito', calcularTotal);
+
+	function calcularTotal (newVal, oldVal) {
+		console.log(getItemsIds());
+		//ticketServices.calcularTotal()
+	}
+
+	function getItemsIds() {
+		return $scope.carrito.map(function (item) {
+			return item._id;
+		});
 	}
 
 });

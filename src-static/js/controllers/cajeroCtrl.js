@@ -1,6 +1,8 @@
-app.controller('cajeroCtrl', function ($scope, itemServices, categoriaServices) {
+app.controller('cajeroCtrl', function ($scope, itemServices, categoriaServices, comboServices, ofertaServices) {
 	$scope.categorias = [];
 	$scope.items = [];
+	$scope.combos = [];
+	$scope.ofertas = [];
 	$scope.carrito = [];
 	$scope.catSelected = '';
 
@@ -28,7 +30,33 @@ app.controller('cajeroCtrl', function ($scope, itemServices, categoriaServices) 
 		console.log(response);
 	}
 
+	function getOfertas () {
+		ofertaServices.getOfertas().then(getOfertasSuccess, getOfertasError);
+	}
+
+	function getOfertasSuccess (response) {
+		$scope.ofertas = response.data;
+	}
+
+	function getOfertasError (response) {
+		console.log(response);
+	}
+
+	function getCombos () {
+		comboServices.getCombos().then(getCombosSuccess, getCombosError);
+	}
+
+	function getCombosSuccess (response) {
+		$scope.combos = response.data;
+	}
+
+	function getCombosError (response) {
+		console.log(response);
+	}
+
 	getItems();
 	getCategorias();
+	getOfertas();
+	getCombos();
 
 });

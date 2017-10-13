@@ -5,6 +5,7 @@ app.directive('gsCajeroMenu', function () {
 		controller: 'cajeroMenuCtrl',
 		scope: {
 			items: '=',
+			combos: '=',
 			catSelected: '=',
 			carrito: '='
 		}

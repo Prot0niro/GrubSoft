@@ -13,8 +13,25 @@ const newTicketErr = {
 const services = {};
 
 services.calcularTotal = (req, res) => {
-	
+	const input = req.body;
+
+	ofertaModel.getOfertasDeHoy((err, ofertas) => {
+		if (err) {
+			return errorHandler.mongooseError(err, res);
+		}
+
+		input.ofertas = ofertas;
+		getItems(input, res, calcularTotal);
+	});
 };
+
+function calcularTotal (input, res) {
+	input = formatInput(input);
+
+	var total = getTotal(input);
+
+	res.status(statusCodes.OK).send({ total: total });
+}
 
 services.generateTicket = (req, res) => {
 	const input = req.body;
@@ -32,7 +49,7 @@ services.generateTicket = (req, res) => {
 			}
 
 			input.ofertas = ofertas;
-			getItems(input, res);
+			getItems(input, res, generarTicket);
 		});
 	});
 	
@@ -55,7 +72,7 @@ function checkNewTicketInput (input, cb) {
 	}
 }
 
-function getItems (input, res) {
+function getItems (input, res, cb) {
 	if (input.itemsIds && input.itemsIds.length) {
 		ItemModel.find({ _id: { $in: input.itemsIds } }, (err, items) => {
 			if (err) {
@@ -63,14 +80,14 @@ function getItems (input, res) {
 			}
 
 			input.items = items;
-			getCombos(input, res);
+			getCombos(input, res, cb);
 		});
 	} else {
-		getCombos(input, res);
+		getCombos(input, res, cb);
 	}
 }
 
-function getCombos (input, res) {
+function getCombos (input, res, cb) {
 	if (input.combosIds && input.combosIds.length) {
 		comboModel.find({ _id: { $in: input.combosIds } }, (err, combos) => {
 			if (err) {
@@ -78,19 +95,15 @@ function getCombos (input, res) {
 			}
 
 			input.combos = combos;
-			generarTicket(input, res);
+			cb(input, res);
 		});
 	} else {
-		generarTicket(input, res);
+		cb(input, res);
 	}
 }
 
 function generarTicket (input, res) {
-	input.itemsIds = formatItemsIds(input.itemsIds);
-	input.items = formatItems(input.items, input.itemsIds);
-	input.combosIds = formatCombosIds(input.combosIds);
-	input.combos = formatCombos(input.combos, input.combosIds);
-	input.ofertas = formatOfertas(input.ofertas);
+	input = formatInput(input);
 
 	const ticket = {
 		total: getTotal(input),
@@ -100,6 +113,16 @@ function generarTicket (input, res) {
 	};
 
 	res.status(201).send(ticket);
+}
+
+function formatInput (input) {
+	input.itemsIds = formatItemsIds(input.itemsIds);
+	input.items = formatItems(input.items, input.itemsIds);
+	input.combosIds = formatCombosIds(input.combosIds);
+	input.combos = formatCombos(input.combos, input.combosIds);
+	input.ofertas = formatOfertas(input.ofertas);
+
+	return input;
 }
 
 function formatItemsIds (itemsIds) {
