@@ -4,7 +4,8 @@ app.directive('gsCajeroVenta', function () {
 		templateUrl: '/templates/directives/cajero-venta.html',
 		controller: 'cajeroVentaCtrl',
 		scope: {
-			carrito: '='
+			carrito: '=',
+			ofertas: '='
 		}
 	}
 });

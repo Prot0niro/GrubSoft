@@ -12,10 +12,6 @@ const newTicketErr = {
 
 const services = {};
 
-services.calcularTotal = (req, res) => {
-	
-};
-
 services.generateTicket = (req, res) => {
 	const input = req.body;
 	input.atendio = req.user.username;

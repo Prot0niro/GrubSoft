@@ -9,6 +9,10 @@
 				ng-repeat="categoria in categorias track by $index" ng-click="selectCategoria(categoria)">
 				{{categoria.nombre}}
 			</button>
+			<button type="button" class="list-group-item list-group-item-action" 
+				ng-class="{ active: isCombosSelected() }" ng-click="selectCombos()">
+			Combos
+			</button>
 		</div>
 	</div>
 </div>

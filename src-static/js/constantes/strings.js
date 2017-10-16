@@ -1,0 +1,7 @@
+app.constant('STRINGS', {
+	TIPO_ITEM: 'ITEM',
+	TIPO_COMBO: 'COMBO',
+	CATEGORIA_COMBOS: 'COMBOS',
+	OFERTA_TIPO_X: 'X',
+	OFERTA_TIPO_D: 'D'
+});

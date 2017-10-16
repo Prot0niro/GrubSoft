@@ -1,14 +1,23 @@
-app.controller('cajeroCategoriaCtrl', function ($scope) {
+app.controller('cajeroCategoriaCtrl', function ($scope, STRINGS) {
 	var _this = this;
 
 	$scope.isAllSelected = function () {
 		return !$scope.catSelected;
-	}
+	};
+
+	$scope.isCombosSelected = function () {
+		return $scope.catSelected === STRINGS.CATEGORIA_COMBOS;
+	};
 
 	$scope.selectAll = function () {
 		_this.deselectAllCategorias();
 		$scope.catSelected = '';
-	}
+	};
+
+	$scope.selectCombos = function () {
+		_this.deselectAllCategorias();
+		$scope.catSelected = STRINGS.CATEGORIA_COMBOS;
+	};
 
 	$scope.selectCategoria = function (categoria) {
 		_this.deselectAllCategorias();
