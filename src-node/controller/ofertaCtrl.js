@@ -92,6 +92,16 @@ services.updateDocument = (req, res) => {
 	});
 };
 
+services.getOfertasDeHoy = (req, res) => {
+	ofertaModel.getOfertasDeHoy((err, ofertas) => {
+		if (err) {
+			return errorHandler.mongooseError(err, res);
+		}
+
+		res.status(statusCodes.OK).send(ofertas);
+	});
+};
+
 function checkNewOfertaInput (body, cb) {
 	if (!body.items || !body.items.length) {
 		invalidInputErr.message = messages.requiredParam('items');

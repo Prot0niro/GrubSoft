@@ -1,8 +1,8 @@
 app.factory('ofertaServices', function ($http) {
 	var services = {};
 
-	services.getOfertas = function () {
-		return $http.get('/service/ofertas');
+	services.getOfertasDelDia = function () {
+		return $http.get('/service/ofertas/hoy');
 	}
 
 	return services;

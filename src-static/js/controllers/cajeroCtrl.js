@@ -31,7 +31,7 @@ app.controller('cajeroCtrl', function ($scope, itemServices, categoriaServices, 
 	}
 
 	function getOfertas () {
-		ofertaServices.getOfertas().then(getOfertasSuccess, getOfertasError);
+		ofertaServices.getOfertasDelDia().then(getOfertasSuccess, getOfertasError);
 	}
 
 	function getOfertasSuccess (response) {

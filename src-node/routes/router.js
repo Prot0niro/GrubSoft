@@ -26,6 +26,7 @@ const routeApp = (app) => {
 	app.get('/service/items', itemCtrl.getItems);
 	app.get('/service/items/:id', itemCtrl.getItem);
 	app.get('/service/ofertas', ofertaCtrl.getDocuments);
+	app.get('/service/ofertas/hoy', ofertaCtrl.getOfertasDeHoy);
 	app.get('/service/ofertas/:id', ofertaCtrl.getDocument);
 
 	app.post('/service/categorias', categoriaCtrl.createDocument);
