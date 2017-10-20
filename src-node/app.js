@@ -16,8 +16,8 @@ app.use('/images', express.static('images'));
 let init = function () {
 	router.routeApp(app);
 
-  	http.createServer(app).listen(8888);
-  	console.log("Servidor iniciado.");
+	http.createServer(app).listen(8888);
+	console.log("Servidor iniciado.");
 }
 
 mongoose.connect(mongoConfig.database, {
