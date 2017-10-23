@@ -20,9 +20,9 @@ const schema = new mongoose.Schema({
 	modificado_por: 	String
 });
 
-schema.statics.getOfertasDeHoy = function (cb) {
+schema.statics.getOfertasDeHoy = function () {
 	const dia = (new Date).getDay();
-	this.find({ dias: dia }, cb);
+	 return this.find({ dias: dia });
 };
 
 function diasValidation (arr) {

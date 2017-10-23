@@ -10,108 +10,78 @@ const updateOpts = {
 	new: true
 };
 
-const docNotFoundErr = {
-	message: messages.MONG_DOC_NOT_FOUND,
-	statusCode: statusCodes.NOT_FOUND
-};
-const invalidInputErr = {
-	statusCode: statusCodes.BAD_REQUEST
-};
+const docNotFoundErr = require('./../util/common-errors').docNotFoundErr;
+const invalidInputErr = require('./../util/common-errors').invalidInputErr;
 
 const services = {};
 
-services.createDocument = (req, res) => {
-	const doc = req.body;
-	doc.creado_por = req.user.username;
-	checkNewOfertaInput(doc, (err) => {
-		if (err) {
-			return errorHandler.mongooseError(err, res);
-		}
+services.createDocument = async (req, res) => {
+	const input = req.body;
+	input.creado_por = req.user.username;
+	await checkNewOfertaInput(input);
 
-		const oferta = new ofertaModel(doc);
-
-		oferta.save((errSave, savedDoc) => {
-			if (errSave) {
-				errorHandler.mongooseError(errSave, res);
-			} else {
-				res.status(statusCodes.CREATED).send(savedDoc);
-			}
-		});
-	});
+	const oferta = new ofertaModel(input);
+	const savedDoc = await oferta.save();
+	res.status(statusCodes.CREATED).send(savedDoc);
 };
 
-services.getDocuments = (req, res) => {
-	ofertaModel.find((err, docs) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else {
-			res.status(statusCodes.OK).send(docs);
-		}
-	});
+services.getDocuments = async (req, res) => {
+	const ofertas = await ofertaModel.find();
+	res.status(statusCodes.OK).send(ofertas);
 };
 
-services.getDocument = (req, res) => {
+services.getDocument = async (req, res) => {
 	const ofertaId = req.params.id;
-	ofertaModel.findById(ofertaId, (err, oferta) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else if (!oferta) {
-			errorHandler.generalError(docNotFoundErr, res);
-		} else {
-			res.status(statusCodes.OK).send(oferta);
-		}
-	});
+	const oferta = await ofertaModel.findById(ofertaId);
+	if (!oferta) {
+		throw docNotFoundErr;
+	}
+
+	res.status(statusCodes.OK).send(oferta);
 };
 
-services.deleteDocument = (req, res) => {
+services.deleteDocument = async (req, res) => {
 	const ofertaId = req.params.id;
-	ofertaModel.findByIdAndRemove(ofertaId, (err, oferta) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else if (!oferta) {
-			errorHandler.generalError(docNotFoundErr, res);
-		} else {
-			res.status(statusCodes.OK).send(oferta);
-		}
-	});
+	const oferta = await ofertaModel.findByIdAndRemove(ofertaId);
+	if (!oferta) {
+		throw docNotFoundErr;
+	}
+
+	res.status(statusCodes.OK).send(oferta);
 };
 
-services.updateDocument = (req, res) => {
+services.updateDocument = async (req, res) => {
 	const ofertaId = req.params.id;
 	const body = req.body;
 	body.modificado_por = req.user.username;
 
-	ofertaModel.findById(ofertaId, (err, oferta) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else if (!oferta) {
-			errorHandler.generalError(docNotFoundErr, res);
-		} else {
-			updateDocument(oferta, body, res);
-		}
-	});
-};
-
-services.getOfertasDeHoy = (req, res) => {
-	ofertaModel.getOfertasDeHoy((err, ofertas) => {
-		if (err) {
-			return errorHandler.mongooseError(err, res);
-		}
-
-		res.status(statusCodes.OK).send(ofertas);
-	});
-};
-
-function checkNewOfertaInput (body, cb) {
-	if (!body.items || !body.items.length) {
-		invalidInputErr.message = messages.requiredParam('items');
-		return cb(invalidInputErr);
+	const oferta = await ofertaModel.findById(ofertaId);
+	if (!oferta) {
+		throw docNotFoundErr;
 	}
 
-	itemModel.checkIfItemsExist(body.items, cb);
+	await updateDocument(oferta, body, res);
+};
+
+services.getOfertasDeHoy = async (req, res) => {
+	const ofertas = await ofertaModel.getOfertasDeHoy();
+	res.status(statusCodes.OK).send(ofertas);
+};
+
+async function checkNewOfertaInput (input) {
+	if (!input.items || !input.items.length) {
+		invalidInputErr.message = messages.requiredParam('items');
+		throw invalidInputErr;
+	}
+
+	const items = await itemModel.find({ _id: { $in: input.items } });
+	if (!items || input.items.length !== items.length) {
+		invalidInputErr.message = messages.ITEMS_NOT_FOUND;
+		throw invalidInputErr;
+	}
 }
 
-function updateDocument (oferta, body, res) {
+async function updateDocument (oferta, body, res) {
 	oferta.nombre = body.nombre || oferta.nombre;
 	oferta.descripcion = body.descripcion || oferta.descripcion;
 	oferta.tipo = body.tipo || oferta.tipo;
@@ -124,13 +94,8 @@ function updateDocument (oferta, body, res) {
 	oferta.modificado_por = body.modificado_por;
 	oferta.fecha_modificado = new Date;
 
-	oferta.save((err, updatedOferta) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else {
-			res.status(statusCodes.OK).send(updatedOferta);
-		}
-	});
+	const updatedOferta = await oferta.save();
+	res.status(statusCodes.OK).send(updatedOferta);
 }
 
 module.exports = services;

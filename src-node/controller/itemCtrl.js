@@ -1,6 +1,5 @@
 const ItemModel = require('./../model/Item');
 const categoriaModel = require('./../model/Categoria');
-const errorHandler = require('./../util/error-handler');
 const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');
 
