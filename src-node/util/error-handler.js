@@ -78,14 +78,9 @@ function manageMongValidError (err, res) {
 }
 
 function manageCastValidError (err, res) {
-	let errObj = castErr;
-
-	if (err.path === MONG_ID_FIELD) {
-		errObj = docNotFoundErr;
-		errObj.mongooseMsg = err.message;
-	}
-
-	handlers.generalError(errObj, res);
+	castErr.campo = err.path
+	castErr.mongooseMsg = err.message;
+	handlers.generalError(castErr, res);
 }
 
 module.exports = handlers;

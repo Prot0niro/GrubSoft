@@ -4,94 +4,70 @@ const errorHandler = require('./../util/error-handler');
 const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');
 
-const itemNotFoundErr = {
-	message: messages.MONG_DOC_NOT_FOUND,
-	statusCode: statusCodes.NOT_FOUND
-};
-const invalidInputErr = {
-	statusCode: statusCodes.BAD_REQUEST
-};
+const docNotFoundErr = require('./../util/common-errors').docNotFoundErr;
+const invalidInputErr = require('./../util/common-errors').invalidInputErr;
 
 const services = {};
 
-services.createItem = (req, res) => {
-	const itemObject = req.body;
-	itemObject.creado_por = req.user.username;
-	const item = new ItemModel(itemObject);
+services.createItem = async (req, res) => {
+	const input = req.body;
 
-	categoriaModel.findById(item.categoria, checkIfCategoriaExists(itemObject, res));
+	await checkNewItemInput(input);
+
+	input.creado_por = req.user.username;
+	const item = new ItemModel(input);
+	const savedItem = await item.save();
+	res.status(statusCodes.CREATED).send(savedItem);
 };
 
-services.getItems = (req, res) => {
-	ItemModel.find((err, items) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else {
-			res.status(statusCodes.OK).send(items);
-		}
-	});
+services.getItems = async (req, res) => {
+	const items = await ItemModel.find();
+	res.status(statusCodes.OK).send(items);
 };
 
-services.getItem = (req, res) => {
+services.getItem = async (req, res) => {
 	const itemId = req.params.id;
-	ItemModel.findById(itemId, (err, item) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else if (!item) {
-			errorHandler.generalError(itemNotFoundErr, res);
-		} else {
-			res.status(statusCodes.OK).send(item);
-		}
-	});
+	const item = await ItemModel.findById(itemId);
+	if (!item) {
+		throw docNotFoundErr;
+	}
+
+	res.status(statusCodes.OK).send(item);
 };
 
-services.deleteItem = (req, res) => {
+services.deleteItem = async (req, res) => {
 	const itemId = req.params.id;
-	ItemModel.findByIdAndRemove(itemId, (err, item) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else if (!item) {
-			errorHandler.generalError(itemNotFoundErr, res);
-		} else {
-			res.status(statusCodes.OK).send(item);
-		}
-	});
+	const item = await ItemModel.findByIdAndRemove(itemId);
+	if (!item) {
+		throw docNotFoundErr;
+	}
+
+	res.status(statusCodes.OK).send(item);
 };
 
-services.updateItem = (req, res) => {
+services.updateItem = async (req, res) => {
 	const itemId = req.params.id;
 	const body = req.body;
 	body.modificado_por = req.user.username;
 
-	ItemModel.findById(itemId, (err, item) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else if (!item) {
-			errorHandler.generalError(itemNotFoundErr, res);
-		} else {
-			updateItem(item, body, res);
-		}
-	});
+	const item = await ItemModel.findById(itemId);
+	if (!item) {
+		throw docNotFoundErr;
+	}
+
+	await updateItem(item, body, res);
 };
 
-function checkIfCategoriaExists (itemObject, res) {
-	return function (err) {
-		if (err) {
-			return errorHandler.mongooseError(err, res)
-		}
-
-		const item = new ItemModel(itemObject);
-		item.save((err, savedItem) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else {
-			res.status(statusCodes.CREATED).send(savedItem);
-		}
-	});
+async function checkNewItemInput (input) {
+	const categoriaId = input.categoria;
+	const categoria = await categoriaModel.findById(categoriaId);
+	if (!categoria) {
+		invalidInputErr.message = messages.ITEM_CAT_NOT_FOUND;
+		throw invalidInputErr;
 	}
 }
 
-function updateItem (item, body, res) {
+async function updateItem (item, body, res) {
 	item.nombre = body.nombre || item.nombre;
 	item.descripcion = body.descripcion || item.descripcion;
 	item.precio = body.precio || item.precio;
@@ -101,13 +77,8 @@ function updateItem (item, body, res) {
 	item.modificado_por = body.modificado_por;
 	body.fecha_modificado = new Date;
 
-	item.save((err, updatedItem) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else {
-			res.status(statusCodes.OK).send(updatedItem);
-		}
-	});
+	const updatedItem = await item.save();
+	res.status(statusCodes.OK).send(updatedItem);
 }
 
 module.exports = services;
