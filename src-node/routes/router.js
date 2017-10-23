@@ -34,7 +34,6 @@ const routeApp = (app) => {
 	app.post('/service/items', itemCtrl.createItem);
 	app.post('/service/ofertas', ofertaCtrl.createDocument);
 	app.post('/service/tickets', ticketCtrl.generateTicket);
-	app.post('/service/total', ticketCtrl.calcularTotal)
 
 	app.put ('/service/categorias/:id', categoriaCtrl.updateDocument);
 	app.put ('/service/combos/:id', comboCtrl.updateDocument);
