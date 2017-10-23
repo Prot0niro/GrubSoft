@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
 	items: 				{ type: [String], 	required: true },
 	imagen: 			String,
 	dias: 				{ type: [Number], 	required: true, validate: diasValidation },
-	tipo: 				{ type: String, 	required: true, validate: { validator: tipoValidation}, message: ERROR_TIPO },
+	tipo: 				{ type: String, 	required: true, validate: { validator: tipoValidation }, message: ERROR_TIPO },
 	descuento: 			{ type: Number, 	validate: descuentoValidation },
 	x_por_y_x: 			{ type: Number, 	validate: xPorYXValidation },
 	x_por_y_y: 			{ type: Number, 	validate: xPorYYValidation },

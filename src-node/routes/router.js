@@ -35,7 +35,7 @@ const routeApp = (app) => {
 	app.post('/service/combos', 			asyncMiddleware(comboCtrl.createDocument));
 	app.post('/service/items', 				asyncMiddleware(itemCtrl.createItem));
 	app.post('/service/ofertas', 			asyncMiddleware(ofertaCtrl.createDocument));
-	app.post('/service/tickets', 			asyncMiddleware(ticketCtrl.generateTicket));
+	app.post('/service/tickets', 			asyncMiddleware(ticketCtrl.nuevaCompra));
 
 	app.put ('/service/categorias/:id', 	asyncMiddleware(categoriaCtrl.updateDocument));
 	app.put ('/service/combos/:id', 		asyncMiddleware(comboCtrl.updateDocument));

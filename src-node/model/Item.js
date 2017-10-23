@@ -12,6 +12,9 @@ const schema = new mongoose.Schema({
 	nombre: { type: String, required: true, index: { unique: true } },
 	categoria: { type: String, required: true },
 	guiso: Boolean,
+	existencias: { type: Number, min: 0, required: true },
+	padre: { type: String },
+	factor: { type: Number, validate: factorValidacion },
 	descripcion: { type: String, required: true },
 	precio: { type: Number, required: true },
 	imagen: String,
@@ -21,18 +24,8 @@ const schema = new mongoose.Schema({
 	modificado_por: String
 });
 
-schema.statics.checkIfItemsExist = function (ids, cb) {
-	this.find({ _id: { $in: ids } }, (err, foundItems) => {
-		if (err) {
-			return cb(err);
-		}
-
-		if (foundItems.length !== ids.length) {
-			return cb(itemNotFoundErr);
-		}
-
-		cb(null);
-	});
-};
+function factorValidacion (val) {
+	return this.padre ? val > 0 : true;
+}
 
 module.exports = mongoose.model('Item', schema);

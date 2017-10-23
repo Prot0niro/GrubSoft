@@ -5,12 +5,90 @@ const errorHandler = require('./../util/error-handler');
 const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');
 
+const docNotFoundErr = require('./../util/common-errors').docNotFoundErr;
 const newTicketErr = {
 	statusCode: statusCodes.BAD_REQUEST,
 	message: messages.TICKET_BAD_REQUEST
 };
 
 const services = {};
+
+services.nuevaCompra = async (req, res) => {
+	const input = req.body;
+	input.atendio = req.user.username;
+	input.creado_por = req.user.username;
+
+	checkNuevaCompraInput(input);
+	itemsObj = await crearObjetoDeItems(input);
+	res.status(200).send(itemsObj);
+};
+
+function checkNuevaCompraInput(input) {
+	let totalItems = 0;
+	if (input.itemsIds) {
+		totalItems += input.itemsIds.length;
+	}
+
+	if (input.combosIds) {
+		totalItems += input.combosIds.length;
+	}
+
+	if (totalItems < 1) {
+		throw newTicketErr;
+	}
+}
+
+async function crearObjetoDeItems (input) {
+	let itemsCompra = {};
+	await addItemsToItemsCompra(itemsCompra, input.itemsIds);
+	await addComboItemsToItemsCompra(itemsCompra, input.combosIds);
+	return itemsCompra;
+}
+
+async function addItemsToItemsCompra (itemsCompra, itemsIds) {
+	if (!itemsIds || !itemsIds.length) {
+		return;
+	}
+
+	for (var i = 0; i < itemsIds.length; i++) {
+		let itemId = itemsIds[i];
+		if (!itemsCompra[itemId]) {
+			itemsCompra[itemId] = (await ItemModel.findById(itemId)).toObject();
+			if (!itemsCompra[itemId]) throw docNotFoundErr;
+			itemsCompra[itemId].carrito = 1;
+		} else {
+			itemsCompra[itemId].carrito++;
+		}
+	}
+}
+
+async function addComboItemsToItemsCompra (itemsCompra, combosIds) {
+	if (!combosIds || !combosIds.length) {
+		return;
+	}
+
+	let combos = {};
+
+	for (let i = 0; i < combosIds.length; i++) {
+		let comboId = combosIds[i];
+		if (!combos[comboId]) {
+			combos[comboId] = await comboModel.findById(comboId);
+			if (!combos[comboId]) throw docNotFoundErr;
+		}
+
+		let comboItems = combos[comboId].items;
+		for (let j = 0; j < comboItems.length; j++) {
+			let itemId = comboItems[j];
+			if (!itemsCompra[itemId]) {
+				itemsCompra[itemId] = await (await ItemModel.findById(itemId)).toObject();
+				if (!itemsCompra[itemId]) throw docNotFoundErr;
+				itemsCompra[itemId].carrito = 1;
+			} else {
+				itemsCompra[itemId].carrito++;
+			}
+		}
+	}
+}
 
 services.generateTicket = (req, res) => {
 	const input = req.body;

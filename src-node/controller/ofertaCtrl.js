@@ -1,14 +1,7 @@
 const ofertaModel = require('./../model/Oferta');
 const itemModel = require('./../model/Item');
-const errorHandler = require('./../util/error-handler');
 const messages = require('./../util/messages');
 const statusCodes = require('./../util/status-codes');
-
-const updateOpts = { 
-	runValidators:true,
-	strict: true,
-	new: true
-};
 
 const docNotFoundErr = require('./../util/common-errors').docNotFoundErr;
 const invalidInputErr = require('./../util/common-errors').invalidInputErr;
