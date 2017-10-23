@@ -25,6 +25,18 @@ const castErr = {
 
 const handlers = {};
 
+handlers.manageError = (err, res) => {
+	if (err.code === MONG_KEY_DUPLICATED_CODE) {
+		manageKeyDuplicatedError(err, res);
+	} else if (err.name === MONG_VALIDATION_ERROR) {
+		manageMongValidError(err, res);
+	} else if (err.name === MONG_CAST_ERROR) {
+		manageCastValidError(err, res);
+	} else {
+		handlers.generalError(err, res);
+	}
+};
+
 handlers.mongooseError = (err, res) => {
 	if (err.code === MONG_KEY_DUPLICATED_CODE) {
 		manageKeyDuplicatedError(err, res);

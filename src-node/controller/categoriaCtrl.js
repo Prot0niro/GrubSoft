@@ -14,85 +14,49 @@ const invalidInputErr = {
 
 const services = {};
 
-services.createDocument = (req, res) => {
+services.createDocument = async (req, res) => {
 	const doc = req.body;
 	doc.creado_por = req.user.username;
 	const categoria = new categoriaModel(doc);
 
-	categoria.save((errSave, savedDoc) => {
-		if (errSave) {
-			errorHandler.mongooseError(errSave, res);
-		} else {
-			res.status(statusCodes.CREATED).send(savedDoc);
-		}
-	});
+	const savedDoc = await categoria.save();
+	res.status(statusCodes.CREATED).send(savedDoc);
 };
 
-services.getDocuments = (req, res) => {
-	categoriaModel.find((err, docs) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else {
-			res.status(statusCodes.OK).send(docs);
-		}
-	});
+services.getDocuments = async (req, res) => {
+	const categorias = await categoriaModel.find().exec();
+	res.status(statusCodes.OK).send(categorias);
 };
 
-services.getDocument = (req, res) => {
+services.getDocument = async (req, res) => {
 	const categoriaId = req.params.id;
-	categoriaModel.findById(categoriaId, (err, categoria) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else if (!categoria) {
-			errorHandler.generalError(docNotFoundErr, res);
-		} else {
-			res.status(statusCodes.OK).send(categoria);
-		}
-	});
+	const categoria = await categoriaModel.findById(categoriaId).exec();
+	res.status(statusCodes.OK).send(categoria);
 };
 
-services.deleteDocument = (req, res) => {
+services.deleteDocument = async (req, res) => {
 	const categoriaId = req.params.id;
-	categoriaModel.findByIdAndRemove(categoriaId, (err, categoria) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else if (!categoria) {
-			errorHandler.generalError(docNotFoundErr, res);
-		} else {
-			res.status(statusCodes.OK).send(categoria);
-		}
-	});
+	const categoriaRemoved = await categoriaModel.findByIdAndRemove(categoriaId).exec();
+	res.status(statusCodes.OK).send(categoriaRemoved);
 };
 
-services.updateDocument = (req, res) => {
+services.updateDocument = async (req, res) => {
 	const categoriaId = req.params.id;
 	const body = req.body;
 	body.modificado_por = req.user.username;
 
-	categoriaModel.findById(categoriaId, (err, categoria) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else if (!categoria) {
-			errorHandler.generalError(docNotFoundErr, res);
-		} else {
-			updateDocument(categoria, body, res);
-		}
-	});
+	const categoria = await categoriaModel.findById(categoriaId).exec();
+	await updateDocument(categoria, body, res);
 };
 
-function updateDocument (categoria, body, res) {
+async function updateDocument (categoria, body, res) {
 	categoria.nombre = body.nombre || categoria.nombre;
 	categoria.imagen = body.imagen || categoria.imagen;
 	categoria.modificado_por = body.modificado_por;
 	categoria.fecha_modificado = new Date;
 
-	categoria.save((err, updatedCategoria) => {
-		if (err) {
-			errorHandler.mongooseError(err, res);
-		} else {
-			res.status(statusCodes.OK).send(updatedCategoria);
-		}
-	});
+	const updatedCategoria = await categoria.save();
+	res.status(statusCodes.OK).send(updatedCategoria);
 }
 
 module.exports = services;
