@@ -59,7 +59,7 @@ handlers.generalError = (err, res) => {
 	};
 
 	if (err) {
-		resBody = err;
+		resBody.err = err;
 		resBody.message = err.message || messages.INTERNAL_ERROR;
 		status = err.statusCode || status;
 	}
