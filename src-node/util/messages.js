@@ -8,6 +8,8 @@ module.exports = {
 	CORRECT_LOGIN: 'Login correcto',
 	FORBIDDEN_ACCESS: 'Acceso prohibido',
 	ITEM_CAT_NOT_FOUND: 'La categoria no existe',
+	ITEM_PADRE_NOT_FOUND: 'No existe el item padre',
+	ITEM_EXISTENCIAS_AGOTADO: 'No hay suficientes existencias del item',
 	ITEMS_NOT_FOUND: 'Uno o más items no existen en la base de datos',
 	INCORRECT_LOGIN: 'Usuario o contraseña inválidos',
 	INTERNAL_ERROR: 'Error interno, contacte al administrador',

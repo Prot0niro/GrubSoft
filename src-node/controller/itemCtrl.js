@@ -64,6 +64,14 @@ async function checkNewItemInput (input) {
 		invalidInputErr.message = messages.ITEM_CAT_NOT_FOUND;
 		throw invalidInputErr;
 	}
+
+	if (input.padre) {
+		const padre = await ItemModel.findById(input.padre);
+		if (!padre) {
+			invalidInputErr.message = messages.ITEM_PADRE_NOT_FOUND;
+			throw invalidInputErr;
+		}
+	}
 }
 
 async function updateItem (item, body, res) {
@@ -74,6 +82,9 @@ async function updateItem (item, body, res) {
 	item.guiso = body.guiso || item.guiso;
 	item.categoria = body.categoria || item.categoria;
 	item.modificado_por = body.modificado_por;
+	item.existencias = body.existencias || item.existencias;
+	item.padre = body.padre || item.padre;
+	item.factor = body.factor || item.factor;
 	body.fecha_modificado = new Date;
 
 	const updatedItem = await item.save();

@@ -10,6 +10,10 @@ const newTicketErr = {
 	statusCode: statusCodes.BAD_REQUEST,
 	message: messages.TICKET_BAD_REQUEST
 };
+const noExistenciasErr = {
+	statusCode: statusCodes.CONFLICT,
+	message: messages.ITEM_EXISTENCIAS_AGOTADO
+}
 
 const services = {};
 
@@ -20,6 +24,7 @@ services.nuevaCompra = async (req, res) => {
 
 	checkNuevaCompraInput(input);
 	itemsObj = await crearObjetoDeItems(input);
+	checkExistenciasDeNuevaCompra(itemsObj);
 	res.status(200).send(itemsObj);
 };
 
@@ -42,6 +47,7 @@ async function crearObjetoDeItems (input) {
 	let itemsCompra = {};
 	await addItemsToItemsCompra(itemsCompra, input.itemsIds);
 	await addComboItemsToItemsCompra(itemsCompra, input.combosIds);
+	await addItemsPadreToItemsCompra(itemsCompra)
 	return itemsCompra;
 }
 
@@ -53,12 +59,14 @@ async function addItemsToItemsCompra (itemsCompra, itemsIds) {
 	for (var i = 0; i < itemsIds.length; i++) {
 		let itemId = itemsIds[i];
 		if (!itemsCompra[itemId]) {
-			itemsCompra[itemId] = (await ItemModel.findById(itemId)).toObject();
+			itemsCompra[itemId] = await ItemModel.findById(itemId);
 			if (!itemsCompra[itemId]) throw docNotFoundErr;
 			itemsCompra[itemId].carrito = 1;
 		} else {
 			itemsCompra[itemId].carrito++;
 		}
+
+		itemsCompra[itemId].existencias--;
 	}
 }
 
@@ -80,11 +88,37 @@ async function addComboItemsToItemsCompra (itemsCompra, combosIds) {
 		for (let j = 0; j < comboItems.length; j++) {
 			let itemId = comboItems[j];
 			if (!itemsCompra[itemId]) {
-				itemsCompra[itemId] = await (await ItemModel.findById(itemId)).toObject();
+				itemsCompra[itemId] =  await ItemModel.findById(itemId);
 				if (!itemsCompra[itemId]) throw docNotFoundErr;
-				itemsCompra[itemId].carrito = 1;
-			} else {
-				itemsCompra[itemId].carrito++;
+			}
+
+			itemsCompra[itemId].existencias--;
+		}
+	}
+}
+
+async function addItemsPadreToItemsCompra (itemsCompra) {
+	for (let itemId in itemsCompra) {
+		if (itemsCompra.hasOwnProperty(itemId)) {
+			let item = itemsCompra[itemId];
+			if (item.padre) {
+				if (!itemsCompra[item.padre]) {
+					itemsCompra[item.padre] = await ItemModel.findById(item.padre);
+					if (!itemsCompra[item.padre]) throw docNotFoundErr;
+				}
+
+				itemsCompra[item.padre].existencias -= item.carrito * item.factor;
+			}
+		}
+	}
+}
+
+function checkExistenciasDeNuevaCompra (itemsObj) {
+	for (let itemId in itemsObj) {
+		if (itemsObj.hasOwnProperty(itemId)) {
+			if (itemsObj[itemId].existencias < 0) {
+				noExistenciasErr.itemId = itemId;
+				throw noExistenciasErr;
 			}
 		}
 	}

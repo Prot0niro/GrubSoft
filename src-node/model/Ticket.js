@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
 	total: { type: Number, required: true },
+	activo: { type: Boolean, default: true, required: true }
 	items: [mongoose.Schema.Types.Mixed],
 	combos: [mongoose.Schema.Types.Mixed],
 	ofertas: [mongoose.Schema.Types.Mixed],
