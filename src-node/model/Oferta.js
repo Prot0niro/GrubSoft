@@ -22,7 +22,7 @@ const schema = new mongoose.Schema({
 
 schema.statics.getOfertasDeHoy = function () {
 	const dia = (new Date).getDay();
-	 return this.find({ dias: dia });
+	return this.find({ dias: dia });
 };
 
 function diasValidation (arr) {
