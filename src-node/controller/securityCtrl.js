@@ -9,6 +9,10 @@ const securityErr = {
 	message: messages.UNAUTHORIZED_ACCESS,
 	statusCode: statusCodes.UNAUTHORIZED
 };
+const forbiddenErr = {
+	message: messages.FORBIDDEN_ACCESS,
+	statusCode: statusCodes.FORBIDDEN
+};
 
 const services = {};
 
@@ -27,6 +31,14 @@ services.ensureAuthenticated = (req, res, next) => {
 		});
 	} else {
 		manageError(securityErr, res);
+	}
+};
+
+services.ensureIsAdmin = (req, res, next) => {
+	if (req.user.admin) {
+		next();
+	} else {
+		res.status(statusCodes.FORBIDDEN).send(forbiddenErr);
 	}
 };
 

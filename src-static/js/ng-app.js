@@ -10,5 +10,8 @@ app.config(function ($routeProvider) {
 		templateUrl: '/templates/login.html',
 		controller: 'loginCtrl'
 	})
+	.when('/inventario', {
+		templateUrl: '/templates/inventario.html'
+	})
 	.otherwise('/');
 });
