@@ -1,7 +1,7 @@
 <div class="container">
 	<div class="row gs-row-menu">
 		<div class="col-sm-3" ng-repeat="item in items" ng-show="showItem(item)">
-			<div class="card gs-card-menu gs-card-margin">
+			<div class="card gs-card-margin">
 				
 				<img class="card-img-top" ng-src="/images/{{item.imagen || 'necro.jpeg'}}" alt="Imagen">
 
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<div class="col-sm-3" ng-repeat="combo in combos" ng-show="showCombos()">
-			<div class="card gs-card-menu gs-card-margin">
+			<div class="card gs-card-margin">
 				
 				<img class="card-img-top" ng-src="/images/{{combo.imagen || 'necro.jpeg'}}" alt="Imagen">
 

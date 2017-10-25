@@ -1,4 +1,4 @@
-app.controller('cajeroCtrl', function ($scope, itemServices, categoriaServices, comboServices, ofertaServices, STRINGS) {
+app.controller('cajeroCtrl', function ($scope, itemServices, categoriaServices, comboServices, ofertaServices) {
 	var _this = this;
 	var NAV_LI_ID = '#navCajeroLi';
 

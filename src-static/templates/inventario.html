@@ -1,0 +1,38 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3" ng-repeat="item in items" ng-show="showItem(item)">
+			<div class="card gs-card-margin">
+				
+				<img class="card-img-top" ng-src="/images/{{item.imagen || 'necro.jpeg'}}" alt="Imagen">
+
+				<div class="card-body">
+					<h4 class="card-title">{{item.nombre}}</h4>
+					<p class="card-text">Existencias: {{item.existencias}}</p>
+					<p class="card-text"><small class="text-muted">{{item.precio | currency}}.</small></p>
+					<p class="card-text">
+						<small class="text-muted">
+							{{item.descripcion}}.
+							<br />
+							{{ item.ofertaTxt }}
+						</small>
+					</p>
+				</div>
+			
+			</div>
+		</div>
+		<div class="col-sm-3" ng-repeat="combo in combos" ng-show="showCombos()">
+			<div class="card gs-card-margin">
+				
+				<img class="card-img-top" ng-src="/images/{{combo.imagen || 'necro.jpeg'}}" alt="Imagen">
+
+				<div class="card-body">
+					<h4 class="card-title">{{combo.nombre}}</h4>
+					<p class="card-text">{{combo.precio | currency}}</p>
+					<p class="card-text"><small class="text-muted">{{combo.descripcion}}.</small></p>
+					<button type="button" class="btn btn-primary" ng-click="addComboToCarrito(combo)">Agregar</button>
+				</div>
+			
+			</div>
+		</div>
+	</div>
+</div>
