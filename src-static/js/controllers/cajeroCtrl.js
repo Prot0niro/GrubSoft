@@ -1,4 +1,7 @@
-app.controller('cajeroCtrl', function ($scope, itemServices, categoriaServices, comboServices, ofertaServices) {
+app.controller('cajeroCtrl', function ($scope, itemServices, categoriaServices, comboServices, ofertaServices, STRINGS) {
+	var _this = this;
+	var NAV_LI_ID = '#navCajeroLi';
+
 	$scope.categorias = [];
 	$scope.items = [];
 	$scope.combos = [];
@@ -54,9 +57,14 @@ app.controller('cajeroCtrl', function ($scope, itemServices, categoriaServices, 
 		console.log(response);
 	}
 
-	getItems();
-	getCategorias();
-	getOfertas();
-	getCombos();
+	this.init = function () {
+		window.activarNavLi(NAV_LI_ID);
+		getItems();
+		getCategorias();
+		getOfertas();
+		getCombos();
+	};
+
+	_this.init();
 
 });

@@ -11,21 +11,29 @@
 			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 				<a class="navbar-brand" href="#">GrubSoft</a>
 
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-					<ul class="navbar-nav mr-auto" ng-controller="sectionCtrl">
-						<li class="nav-item active">
+				<div class="collapse navbar-collapse">
+					<ul class="navbar-nav mr-auto" ng-controller="sectionCtrl" id="navbarUl">
+						<li class="nav-item" id="navCajeroLi">
 							<a class="nav-link" href="#">
 								Cajero
 							</a>
 						</li>
-						<li class="nav-item" ng-show="admin">
+						<li class="nav-item" ng-show="admin" id="navInventarioLi">
 							<a class="nav-link" href="#!/inventario">
 								Inventario
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item" id="navCorteLi">
 							<a class="nav-link" href="#">
 								Corte
+							</a>
+						</li>
+					</ul>
+
+					<ul class="my-2 my-lg-0 navbar-nav" ng-controller="logoutCtrl">
+						<li class="nav-item active" id="navCerrarSesionLi" ng-show="showCerrarSesion()">
+							<a class="nav-link" href="" ng-click="cerrarSesion()">
+								Cerrar sesión
 							</a>
 						</li>
 					</ul>

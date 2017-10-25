@@ -11,7 +11,8 @@ app.config(function ($routeProvider) {
 		controller: 'loginCtrl'
 	})
 	.when('/inventario', {
-		templateUrl: '/templates/inventario.html'
+		templateUrl: '/templates/inventario.html',
+		controller: 'inventarioCtrl'
 	})
 	.otherwise('/');
 });
