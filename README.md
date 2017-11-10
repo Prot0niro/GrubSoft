@@ -2,9 +2,11 @@
 
 ## Installation
 
-Install [node](https://nodejs.org/en/download/) > 8
-Install and run [MongoDB](https://www.mongodb.com/download-center)
-On poject root run
+Install [node](https://nodejs.org/en/download/).
+Install and run [MongoDB](https://www.mongodb.com/download-center).
+
+On poject root run:
+
 ```
 npm install
 ```
@@ -20,7 +22,7 @@ Open http://localhost:8888/
 
 ## Flow
 
-Register a user with POST:/register
+Register a user with POST:/register.
 ```json
 {
 	"username": "admin",
